@@ -28,6 +28,7 @@
 #ifdef SOFTDEVICE_PRESENT
 #include "nrf_sdm.h"
 #include "nrf_soc.h"
+#include "dfu_types.h"
 #endif
 
 #include "nrf_usbd.h"
@@ -55,7 +56,10 @@ void usb_init(bool cdc_only)
 
 #ifdef SOFTDEVICE_PRESENT
   uint8_t sd_en = false;
-  (void) sd_softdevice_is_enabled(&sd_en);
+
+  if (SD_MAGIC_OK()) {
+    (void) sd_softdevice_is_enabled(&sd_en);
+  }
 
   if ( sd_en ) {
     sd_power_usbdetected_enable(true);
@@ -111,11 +115,13 @@ void usb_teardown(void)
     nrf_usbd_disable(NRF_USBD);
 
 #if defined(SOFTDEVICE_PRESENT)
-    sd_clock_hfclk_release();
+    if (SD_MAGIC_OK()) {
+      sd_clock_hfclk_release();
 
-    sd_power_usbdetected_enable(false);
-    sd_power_usbpwrrdy_enable(false);
-    sd_power_usbremoved_enable(false);
+      sd_power_usbdetected_enable(false);
+      sd_power_usbpwrrdy_enable(false);
+      sd_power_usbremoved_enable(false);
+    }
 #endif
   }
 }

@@ -376,9 +376,11 @@ static void interrupts_disable(void)
 void bootloader_app_start(uint32_t app_addr)
 {
 #ifdef SOFTDEVICE_PRESENT
-    // If the applications CRC has been checked and passed, the magic number will be written and we
-    // can start the application safely.
-    APP_ERROR_CHECK ( sd_softdevice_disable() );
+    if (SD_MAGIC_OK()) {
+        // If the applications CRC has been checked and passed, the magic number will be written and we
+        // can start the application safely.
+        APP_ERROR_CHECK ( sd_softdevice_disable() );
+    }
 #endif
 
     interrupts_disable();
@@ -394,7 +396,9 @@ void bootloader_app_start(uint32_t app_addr)
 #endif
 
 #ifdef SOFTDEVICE_PRESENT
-    APP_ERROR_CHECK( sd_softdevice_vector_table_base_set(app_addr) );
+    if (SD_MAGIC_OK()) {
+        APP_ERROR_CHECK( sd_softdevice_vector_table_base_set(app_addr) );
+    }
 #else
     SCB->VTOR = app_addr;
 #endif
