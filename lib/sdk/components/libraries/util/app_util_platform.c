@@ -70,10 +70,11 @@ void app_util_critical_region_enter(uint8_t *p_nested)
     if (SD_MAGIC_OK()) {
         /* return value can be safely ignored */
         (void) sd_nvic_critical_region_enter(p_nested);
-    }
-#else
-    app_util_disable_irq();
+    } else
 #endif
+    {
+        app_util_disable_irq();
+    }
 }
 
 void app_util_critical_region_exit(uint8_t nested)
@@ -86,10 +87,11 @@ void app_util_critical_region_exit(uint8_t nested)
     if (SD_MAGIC_OK()) {
         /* return value can be safely ignored */
         (void) sd_nvic_critical_region_exit(nested);
-    }
-#else
-    app_util_enable_irq();
+    } else
 #endif
+    {
+        app_util_enable_irq();
+    }
 }
 
 

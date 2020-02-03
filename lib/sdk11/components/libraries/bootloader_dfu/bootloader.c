@@ -398,10 +398,11 @@ void bootloader_app_start(uint32_t app_addr)
 #ifdef SOFTDEVICE_PRESENT
     if (SD_MAGIC_OK()) {
         APP_ERROR_CHECK( sd_softdevice_vector_table_base_set(app_addr) );
-    }
-#else
-    SCB->VTOR = app_addr;
+    } else
 #endif
+    {
+        SCB->VTOR = app_addr;
+    }
 
     bootloader_util_app_start(app_addr);
 }
