@@ -30,14 +30,14 @@
 /*------------------------------------------------------------------*/
 /* LED
  *------------------------------------------------------------------*/
-#define LEDS_NUMBER           2  // TODO(gpshead): support 0.
+#define LEDS_NUMBER           1 
 #define LED_PRIMARY_PIN       _PINNUM(0, 23)  // Red
-#define LED_SECONDARY_PIN     _PINNUM(0, 24)  // Blue
+// #define LED_SECONDARY_PIN     _PINNUM(0, 24)  // Blue
 #define LED_STATE_ON          0
 
-//#define LED_RGB_RED_PIN       _PINNUM(0, 23)
-//#define LED_RGB_GREEN_PIN     _PINNUM(0, 22)
-//#define LED_RGB_BLUE_PIN      _PINNUM(0, 24)
+#define LED_RGB_RED_PIN       _PINNUM(0, 23)
+#define LED_RGB_GREEN_PIN     _PINNUM(0, 22)
+#define LED_RGB_BLUE_PIN      _PINNUM(0, 24)
 #define BOARD_RGB_BRIGHTNESS  0x404040
 /*------------------------------------------------------------------*/
 /* BUTTON
@@ -50,10 +50,10 @@
 
 // Used as model string in OTA mode
 #define BLEDIS_MANUFACTURER   "MakerDiary"
-#define BLEDIS_MODEL          "nRF52840 Micro Dev Kit USB Dongle"
+#define BLEDIS_MODEL          "nRF52840 MDK USB Dongle"
 
-#define UF2_PRODUCT_NAME   "MDK nRF52840 USB Dongle"
-#define UF2_VOLUME_LABEL   "MDK840DONGL"
+#define UF2_PRODUCT_NAME   "nRF52840 MDK USB Dongle"
+#define UF2_VOLUME_LABEL   "MDK-DONGLE"
 #define UF2_BOARD_ID       "nRF52840-Dongle-v1"
 #define UF2_INDEX_URL      "https://wiki.makerdiary.com/nrf52840-mdk-usb-dongle/"
 

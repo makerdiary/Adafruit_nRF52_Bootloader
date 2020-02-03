@@ -41,10 +41,10 @@ else
 NRFJPROG = nrfjprog
 endif
 
-ifeq ($(OS),Windows_NT)
-PROGFILES = C:/Program Files (x86)
-GNU_INSTALL_ROOT = $(PROGFILES)/GNU Tools ARM Embedded/7 2018-q2-update/bin/
-endif
+# ifeq ($(OS),Windows_NT)
+# PROGFILES = C:/Program Files (x86)
+# GNU_INSTALL_ROOT = $(PROGFILES)/GNU Tools ARM Embedded/7 2018-q2-update/bin/
+# endif
 
 MK := mkdir
 RM := rm -rf
@@ -238,11 +238,11 @@ CFLAGS += -fno-builtin --short-enums -fstack-usage
 
 # Defined Symbol (MACROS)
 CFLAGS += -D__HEAP_SIZE=0
-CFLAGS += -DCONFIG_GPIO_AS_PINRESET
+# CFLAGS += -DCONFIG_GPIO_AS_PINRESET
 CFLAGS += -DCONFIG_NFCT_PINS_AS_GPIOS
 CFLAGS += -DBLE_STACK_SUPPORT_REQD
 CFLAGS += -DSWI_DISABLE0
-CFLAGS += -DSOFTDEVICE_PRESENT
+# CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -DFLOAT_ABI_HARD
 CFLAGS += -DDFU_APP_DATA_RESERVED=7*4096
 CFLAGS += $(MCU_FLAGS)
