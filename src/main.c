@@ -237,6 +237,9 @@ int main(void)
     // Initiate an update of the firmware.
     APP_ERROR_CHECK( bootloader_dfu_start(_ota_dfu, 0) );
 
+    // wait for macOS file copy operation
+    NRFX_DELAY_MS(500);
+
     if ( _ota_dfu )
     {
       sd_softdevice_disable();
