@@ -1,4 +1,4 @@
-# Adafruit nRF52 Bootloader
+# UF2 Bootloader
 
 [![Build Status](https://github.com/adafruit/Adafruit_nRF52_Bootloader/workflows/Build/badge.svg)](https://github.com/adafruit/Adafruit_nRF52_Bootloader/actions)
 
