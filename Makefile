@@ -238,8 +238,8 @@ CFLAGS += -fno-builtin --short-enums -fstack-usage
 
 # Defined Symbol (MACROS)
 CFLAGS += -D__HEAP_SIZE=0
-# CFLAGS += -DCONFIG_GPIO_AS_PINRESET
-CFLAGS += -DCONFIG_NFCT_PINS_AS_GPIOS
+CFLAGS += -DCONFIG_GPIO_AS_PINRESET
+# CFLAGS += -DCONFIG_NFCT_PINS_AS_GPIOS
 CFLAGS += -DBLE_STACK_SUPPORT_REQD
 CFLAGS += -DSWI_DISABLE0
 CFLAGS += -DSOFTDEVICE_PRESENT
@@ -385,7 +385,8 @@ combinehex: $(BUILD)/$(MERGED_FNAME).hex
 
 $(BUILD)/$(MERGED_FNAME).hex: $(BUILD)/$(OUTPUT_FILENAME)-nosd.hex
 	@echo CR $(MERGED_FNAME).hex
-	@mergehex -q -m $< $(SD_HEX) -o $@
+	# @mergehex -q -m $< $(SD_HEX) -o $@
+	@hexmerge.py -o $@ $< $(SD_HEX)::0xE00
 
 ## Create pkg file for bootloader+SD combo to use with DFU
 genpkg: $(BUILD)/$(MERGED_FNAME).zip
