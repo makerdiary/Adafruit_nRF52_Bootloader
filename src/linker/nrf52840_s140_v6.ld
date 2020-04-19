@@ -11,7 +11,7 @@ MEMORY
    *  those values do not match. The check is performed in main.c, see
    *  APP_ERROR_CHECK_BOOL(*((uint32_t *)NRF_UICR_BOOT_START_ADDRESS) == BOOTLOADER_REGION_START);
    */
-  FLASH (rx) : ORIGIN = 0xE0000, LENGTH = 0xFE000-0xE0000
+  FLASH (rx) : ORIGIN = 0xF4000, LENGTH = 0xFE000-0xF4000 /* 40 KB */
 
   /** Location of mbr params page in flash. */
   MBR_PARAMS_PAGE (rw) : ORIGIN = 0xFE000, LENGTH = 0x1000

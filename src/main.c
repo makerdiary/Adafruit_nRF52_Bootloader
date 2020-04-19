@@ -66,6 +66,8 @@
 #include "nrf_mbr.h"
 #include "pstorage.h"
 #include "nrfx_nvmc.h"
+#include "nrfx_gpiote.h"
+#include "app_timer.h"
 
 
 #ifdef NRF_USBD
@@ -121,7 +123,7 @@ enum { BLE_CONN_CFG_HIGH_BANDWIDTH = 1 };
 
 #ifdef NRF52840_XXAA
   // Flash 1024 KB
-  STATIC_ASSERT( APPDATA_ADDR_START == 0xD9000);
+  STATIC_ASSERT( APPDATA_ADDR_START == 0xED000);
 
 #else
   // Flash 512 KB
@@ -149,8 +151,63 @@ void softdev_mbr_init(void)
   sd_mbr_command(&com);
 }
 
+void power_on(void)
+{
+  // P0.28 - DCDC_ON_REQ
+  nrf_gpio_cfg_output(28);
+  nrf_gpio_pin_write(28, 1);
+}
+
+void power_off(void)
+{
+  nrf_gpio_pin_write(28, 0);
+}
+
+APP_TIMER_DEF(m_timer_id);
+
+static void timeout_handler(void * p_context)
+{
+  led_state(STATE_POWER_OFF);
+  power_off();
+  while (button_pressed(BUTTON_DFU)) {
+    NRFX_DELAY_MS(1);
+  }
+
+  NRFX_DELAY_MS(100);
+  NVIC_SystemReset();
+}
+
+void button_event_handler(nrfx_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
+{
+  if (button_pressed(BUTTON_DFU)) {
+    app_timer_start(m_timer_id, APP_TIMER_TICKS(3000), NULL);
+    led_state(STATE_BUTTON_PRESSED);
+  } else {
+    app_timer_stop(m_timer_id);
+    led_state(STATE_BUTTON_RELEASED);
+  }
+}
+
+void button_event_setup(void)
+{
+    app_timer_create(&m_timer_id,
+                     APP_TIMER_MODE_SINGLE_SHOT,
+                     timeout_handler);
+
+    nrfx_gpiote_init(0);
+
+    nrfx_gpiote_in_config_t config = NRFX_GPIOTE_CONFIG_IN_SENSE_TOGGLE(true);
+    config.pull = NRF_GPIO_PIN_PULLUP;
+
+    nrfx_gpiote_in_init(BUTTON_DFU, &config, button_event_handler);
+
+    nrfx_gpiote_in_event_enable(BUTTON_DFU, true);
+}
+
 int main(void)
 {
+  power_on();
+
   // SD is already Initialized in case of BOOTLOADER_DFU_OTA_MAGIC
   bool sd_inited = (NRF_POWER->GPREGRET == DFU_MAGIC_OTA_APPJUM);
 
@@ -191,10 +248,15 @@ int main(void)
 
   /*------------- Determine DFU mode (Serial, OTA, FRESET or normal) -------------*/
   // DFU button pressed
-  dfu_start  = dfu_start || button_pressed(BUTTON_DFU);
+  // dfu_start  = dfu_start || button_pressed(BUTTON_DFU);
+
+  // usb connected
+  if (nrf_power_usbregstatus_vbusdet_get(NRF_POWER) && button_pressed(BUTTON_DFU)) {
+    dfu_start = true;
+  }
 
   // DFU + FRESET are pressed --> OTA
-  _ota_dfu = _ota_dfu  || ( button_pressed(BUTTON_DFU) && button_pressed(BUTTON_FRESET) ) ;
+  // _ota_dfu = _ota_dfu  || ( button_pressed(BUTTON_DFU) && button_pressed(BUTTON_FRESET) ) ;
 
   bool const valid_app = bootloader_app_is_valid(DFU_BANK_0_REGION_START);
 
@@ -222,6 +284,8 @@ int main(void)
 
   if ( dfu_start || !valid_app )
   {
+    button_event_setup();
+
     if ( _ota_dfu )
     {
       led_state(STATE_BLE_DISCONNECTED);

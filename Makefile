@@ -117,6 +117,7 @@ C_SOURCE_FILES += $(SRC_PATH)/dfu_ble_svc.c
 C_SOURCE_FILES += $(SRC_PATH)/dfu_init.c
 
 # nrfx
+C_SOURCE_FILES += $(NRFX_PATH)/drivers/src/nrfx_gpiote.c
 C_SOURCE_FILES += $(NRFX_PATH)/drivers/src/nrfx_power.c
 C_SOURCE_FILES += $(NRFX_PATH)/drivers/src/nrfx_nvmc.c
 C_SOURCE_FILES += $(NRFX_PATH)/mdk/system_$(MCU_SUB_VARIANT).c
@@ -392,4 +393,4 @@ $(BUILD)/$(MERGED_FNAME).hex: $(BUILD)/$(OUTPUT_FILENAME)-nosd.hex
 genpkg: $(BUILD)/$(MERGED_FNAME).zip
 
 $(BUILD)/$(MERGED_FNAME).zip: $(BUILD)/$(OUTPUT_FILENAME)-nosd.hex
-	@$(NRFUTIL) dfu genpkg --dev-type 0x0052 --dev-revision $(DFU_DEV_REV) --bootloader $< --softdevice $(SD_HEX) $@
+	@$(NRFUTIL) dfu genpkg --dev-type 0x0052 --dev-revision $(DFU_DEV_REV) --bootloader $< $@

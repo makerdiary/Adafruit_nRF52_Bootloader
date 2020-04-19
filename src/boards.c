@@ -228,12 +228,22 @@ void led_tick() {
     #endif
 }
 
+static uint32_t last_state = STATE_BUTTON_RELEASED;
 static uint32_t rgb_color;
 static bool temp_color_active = false;
 void led_state(uint32_t state)
 {
     uint32_t new_rgb_color = rgb_color;
     uint32_t temp_color = 0;
+
+    if (last_state == STATE_POWER_OFF) {
+      return;
+    }
+
+    if (state == STATE_BUTTON_RELEASED) {
+      state = last_state;
+    }
+
     switch (state) {
         case STATE_USB_MOUNTED:
           new_rgb_color = 0x00ff00;
@@ -273,10 +283,21 @@ void led_state(uint32_t state)
           primary_cycle_length = 300;
           #endif
           break;
+        case STATE_BUTTON_PRESSED:
+          state = last_state;
+          new_rgb_color = 0xffff00;
+          primary_cycle_length = 3000;
+          break;
+        case STATE_POWER_OFF:
+          new_rgb_color = 0x00;
+          primary_cycle_length = 3000;
+          break;
 
         default:
         break;
     }
+    last_state = state;
+
     uint8_t* final_color = NULL;
     new_rgb_color &= BOARD_RGB_BRIGHTNESS;
     if (temp_color != 0){
