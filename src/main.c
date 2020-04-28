@@ -206,7 +206,7 @@ void button_event_setup(void)
 
 int main(void)
 {
-  power_on();
+  // power_on();
 
   // SD is already Initialized in case of BOOTLOADER_DFU_OTA_MAGIC
   bool sd_inited = (NRF_POWER->GPREGRET == DFU_MAGIC_OTA_APPJUM);
@@ -284,7 +284,7 @@ int main(void)
 
   if ( dfu_start || !valid_app )
   {
-    button_event_setup();
+    // button_event_setup();
 
     if ( _ota_dfu )
     {
