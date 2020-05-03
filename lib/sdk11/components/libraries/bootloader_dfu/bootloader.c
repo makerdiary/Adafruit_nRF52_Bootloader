@@ -157,7 +157,7 @@ bool bootloader_app_is_valid(uint32_t app_addr)
         return false;
     }
 
-    bool success = false;
+    bool success = true;
 
     bootloader_util_settings_get(&p_bootloader_settings);
 
