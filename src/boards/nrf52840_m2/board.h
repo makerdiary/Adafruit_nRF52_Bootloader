@@ -56,4 +56,8 @@
 #define UF2_BOARD_ID       "nRF52840M2"
 #define UF2_INDEX_URL      "https://wiki.makerdiary.com/nrf52840-m2"
 
+#define USB_DESC_VID            0x1915
+#define USB_DESC_UF2_PID        0x0029
+#define USB_DESC_CDC_ONLY_PID   0x002A
+
 #endif /* _M2_H_ */
