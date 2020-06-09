@@ -313,11 +313,11 @@ int main(void)
     }
   }
 
-  // Adafruit Factory reset
-  if ( !button_pressed(BUTTON_DFU) && button_pressed(BUTTON_FRESET) )
-  {
-    adafruit_factory_reset();
-  }
+  // // Adafruit Factory reset
+  // if ( !button_pressed(BUTTON_DFU) && button_pressed(BUTTON_FRESET) )
+  // {
+  //   adafruit_factory_reset();
+  // }
 
   // Reset Board
   board_teardown();
