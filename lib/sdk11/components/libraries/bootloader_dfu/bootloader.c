@@ -149,8 +149,6 @@ static void wait_for_events(void)
 
 bool bootloader_app_is_valid(uint32_t app_addr)
 {
-  bootloader_settings_t const * p_bootloader_settings;
-
     // There exists an application in CODE region 1.
     if (*((uint32_t *)app_addr) == EMPTY_FLASH_MASK)
     {
@@ -158,7 +156,8 @@ bool bootloader_app_is_valid(uint32_t app_addr)
     }
 
     bool success = true;
-
+#if 0
+    bootloader_settings_t const * p_bootloader_settings;
     bootloader_util_settings_get(&p_bootloader_settings);
 
     // The application in CODE region 1 is flagged as valid during update.
@@ -176,7 +175,7 @@ bool bootloader_app_is_valid(uint32_t app_addr)
 
         success = (image_crc == p_bootloader_settings->bank_0_crc);
     }
-
+#endif
     return success;
 }
 
